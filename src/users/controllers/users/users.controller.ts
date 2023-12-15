@@ -2,6 +2,7 @@ import { Controller, Get, Post,Query, Body, Param, UsePipes, ValidationPipe, Par
 import { Request,Response } from 'express';
 import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
 import { UserssService } from '../../services/userss/userss.service';
+import { ValidateCreateUserPipe } from 'src/users/pipes/validate-create-user/validate-create-user.pipe';
 @Controller('users')
 export class UsersController {
     constructor(private UserssService:UserssService) {
@@ -15,8 +16,8 @@ export class UsersController {
 
     @Post('create')
     @UsePipes(new ValidationPipe())
-    createUser(@Body() userData:CreateUserDto) {
-        console.log(typeof(userData.age));
+    createUser(@Body(ValidateCreateUserPipe) userData:CreateUserDto) {
+        console.log(typeof(userData.age.toPrecision()));
         this.UserssService.createUser(userData);
         return {};
     };
